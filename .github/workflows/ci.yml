@@ -9,6 +9,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: Checkout Submodules
+        run: git submodule update --init --recursive
       - name: Use Node.js 12
         uses: actions/setup-node@v1
         with:
