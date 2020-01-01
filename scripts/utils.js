@@ -11,10 +11,10 @@ module.exports.getDotaPath = async () => {
     }
 };
 
-module.exports.addonName = packageJson.name;
+module.exports.addonName = process.env.DOTA_ADDON_NAME || packageJson.name;
 if (!/^[a-z][\d_a-z]+$/.test(module.exports.addonName)) {
     throw new Error(
         "Addon name may consist only of lowercase characters, digits, and underscores " +
-            "and should start with a letter. Edit `name` field in `package.json` file."
+            "and should start with a letter. Edit `name` field in `package.json` file.",
     );
 }
