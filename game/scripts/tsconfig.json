@@ -3,6 +3,7 @@
         "rootDir": "vscripts",
         "target": "esnext",
         "lib": ["esnext"],
+        "types": [],
         "moduleResolution": "node",
         "experimentalDecorators": true,
         "strict": true
