@@ -1,7 +1,7 @@
 const assert = require("assert");
 const fs = require("fs");
 const path = require("path");
-const { addonName, getDotaPath } = require("./utils");
+const { getAddonName, getDotaPath } = require("./utils");
 
 (async () => {
     const dotaPath = await getDotaPath();
@@ -17,7 +17,7 @@ const { addonName, getDotaPath } = require("./utils");
         const targetRoot = path.join(dotaPath, directoryName, "dota_addons");
         assert(fs.existsSync(targetRoot), `Could not find '${targetRoot}'`);
 
-        const targetPath = path.join(dotaPath, directoryName, "dota_addons", addonName);
+        const targetPath = path.join(dotaPath, directoryName, "dota_addons", getAddonName());
         if (fs.existsSync(targetPath)) {
             const isCorrect = fs.statSync(sourcePath).isSymbolicLink() && fs.realpathSync(sourcePath) === sourcePath;
             if (!isCorrect) {

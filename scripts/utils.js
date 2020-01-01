@@ -1,6 +1,17 @@
 const { findSteamAppByName, SteamNotFoundError } = require("find-steam-app");
 const packageJson = require("../package.json");
 
+module.exports.getAddonName = () => {
+    if (!/^[a-z][\d_a-z]+$/.test(packageJson.name)) {
+        throw new Error(
+            "Addon name may consist only of lowercase characters, digits, and underscores " +
+                "and should start with a letter. Edit `name` field in `package.json` file.",
+        );
+    }
+
+    return packageJson.name;
+};
+
 module.exports.getDotaPath = async () => {
     try {
         return await findSteamAppByName("dota 2 beta");
@@ -10,11 +21,3 @@ module.exports.getDotaPath = async () => {
         }
     }
 };
-
-module.exports.addonName = process.env.DOTA_ADDON_NAME || packageJson.name;
-if (!/^[a-z][\d_a-z]+$/.test(module.exports.addonName)) {
-    throw new Error(
-        "Addon name may consist only of lowercase characters, digits, and underscores " +
-            "and should start with a letter. Edit `name` field in `package.json` file.",
-    );
-}
