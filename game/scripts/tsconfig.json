@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "rootDir": "vscripts",
+        "target": "esnext",
+        "lib": ["esnext"],
+        "moduleResolution": "node",
+        "experimentalDecorators": true,
+        "strict": true
+    },
+    "tstl": {
+        "luaTarget": "JIT",
+        "sourceMapTraceback": true
+    }
+}

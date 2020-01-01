@@ -1,0 +1,5 @@
+#base "heroes/meepo.kv"
+
+"DOTAAbilities"
+{
+}
