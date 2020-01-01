@@ -5,7 +5,7 @@ A template for Dota 2 Custom Games built with modern technologies. It includes
 - [TypeScript for Panorama](https://moddota.com/articles/introduction-to-panorama-ui-with-typescript)
 - [TypeScript for VScripts](https://typescripttolua.github.io/)
 - Simple commands to build and launch your custom game
-- [Continuos Integration](#continuos-integration) support
+- [Continuous Integration](#continuous-integration) support
 
 ## Getting Started
 
@@ -15,6 +15,6 @@ A template for Dota 2 Custom Games built with modern technologies. It includes
 
 After that you can press `Ctrl+Shift+B` in VSCode or run `npm run dev` command in terminal to compile your code and watch for changes.
 
-## Continuos Integration
+## Continuous Integration
 
 This template includes a [GitHub Actions](https://github.com/features/actions) [workflow](.github/workflows/ci.yml) that builds your custom game on every commit and fails when there are type errors.
