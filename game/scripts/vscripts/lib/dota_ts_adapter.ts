@@ -1,19 +1,17 @@
-if (_G.reloadCache === undefined) {
-    _G.reloadCache = {}
+const global = globalThis as typeof globalThis & { reloadCache: Record<string, any> };
+if (global.reloadCache === undefined) {
+    global.reloadCache = {};
 }
 
-export function reloadable<T extends {new(...args: any[]): {}}>(constructor: T): T {
+export function reloadable<T extends { new (...args: any[]): {} }>(constructor: T): T {
     const className = constructor.name;
-    if (_G.reloadCache[className] === undefined) {
-        _G.reloadCache[className] = constructor;
+    if (global.reloadCache[className] === undefined) {
+        global.reloadCache[className] = constructor;
     }
 
-    Object.assign(_G.reloadCache[className].prototype, constructor.prototype);
-    return _G.reloadCache[className];
+    Object.assign(global.reloadCache[className].prototype, constructor.prototype);
+    return global.reloadCache[className];
 }
-
-declare function getfenv(this: void, obj: any): {[key: string]: any};
-declare function getmetatable(this: void, obj: object): object;
 
 export function luaModifier<T extends typeof CDOTA_Modifier_Lua>(modifier: T): T {
     const instance: any = {};

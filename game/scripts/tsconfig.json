@@ -3,7 +3,7 @@
         "rootDir": "vscripts",
         "target": "esnext",
         "lib": ["esnext"],
-        "types": [],
+        "types": ["lua-types/jit"],
         "moduleResolution": "node",
         "experimentalDecorators": true,
         "strict": true
