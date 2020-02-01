@@ -1,7 +1,7 @@
-import { luaAbility } from "../../../lib/dota_ts_adapter";
+import { BaseAbility, registerAbility } from "../../../lib/dota_ts_adapter";
 
-@luaAbility
-class meepo_earthbind_ts_example extends CDOTA_Ability_Lua {
+@registerAbility("meepo_earthbind_ts_example")
+export class meepo_earthbind_ts_example extends BaseAbility {
     particle?: ParticleID;
 
     GetCooldown() {
@@ -57,11 +57,9 @@ class meepo_earthbind_ts_example extends CDOTA_Ability_Lua {
             fEndRadius: radius,
             Source: caster,
             bHasFrontalCone: false,
-            bReplaceExisting: false,
             iUnitTargetTeam: DOTA_UNIT_TARGET_TEAM.DOTA_UNIT_TARGET_TEAM_NONE,
             iUnitTargetFlags: DOTA_UNIT_TARGET_FLAGS.DOTA_UNIT_TARGET_FLAG_NONE,
             iUnitTargetType: DOTA_UNIT_TARGET_TYPE.DOTA_UNIT_TARGET_NONE,
-            bDeleteOnHit: false,
             vVelocity: (direction * projectileSpeed) as Vector,
             bProvidesVision: true,
             iVisionRadius: radius,
@@ -77,7 +75,7 @@ class meepo_earthbind_ts_example extends CDOTA_Ability_Lua {
         const units = FindUnitsInRadius(
             caster.GetTeamNumber(),
             location,
-            null,
+            undefined,
             radius,
             DOTA_UNIT_TARGET_TEAM.DOTA_UNIT_TARGET_TEAM_ENEMY,
             DOTA_UNIT_TARGET_TYPE.DOTA_UNIT_TARGET_BASIC | DOTA_UNIT_TARGET_TYPE.DOTA_UNIT_TARGET_HERO,

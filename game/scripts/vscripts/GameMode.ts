@@ -1,11 +1,10 @@
-import { reloadable } from "./lib/dota_ts_adapter";
-
-LinkLuaModifier("modifier_panic", "modifiers/modifier_panic.lua", LuaModifierType.LUA_MODIFIER_MOTION_NONE);
+import { reloadable } from "./lib/tstl-utils";
+import { modifier_panic } from "./modifiers/modifier_panic";
 
 const heroSelectionTime = 10;
 
 declare global {
-    class CDOTAGamerules {
+    interface CDOTAGamerules {
         Addon: GameMode;
     }
 }
@@ -69,7 +68,7 @@ export class GameMode {
         const unit = EntIndexToHScript(event.entindex) as CDOTA_BaseNPC; // Cast to npc since this is the 'npc_spawned' event
         if (unit.IsRealHero()) {
             Timers.CreateTimer(1, () => {
-                unit.AddNewModifier(undefined, undefined, "modifier_panic", { duration: 8 });
+                modifier_panic.apply(unit, undefined, undefined, { duration: 8 });
             });
 
             if (!unit.HasAbility("meepo_earthbind_ts_example")) {

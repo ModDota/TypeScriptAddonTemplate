@@ -1,7 +1,7 @@
-import { luaModifier } from "../lib/dota_ts_adapter";
+import { BaseModifier, registerModifier } from "../lib/dota_ts_adapter";
 
 // Base speed modifier -- Could be moved to a separate file
-class Modifier_Speed extends CDOTA_Modifier_Lua {
+class ModifierSpeed extends BaseModifier {
     // Declare functions
     DeclareFunctions(): modifierfunction[] {
         return [modifierfunction.MODIFIER_PROPERTY_MOVESPEED_ABSOLUTE];
@@ -12,10 +12,10 @@ class Modifier_Speed extends CDOTA_Modifier_Lua {
     }
 }
 
-@luaModifier
-class modifier_panic extends Modifier_Speed {
+@registerModifier("modifier_panic")
+export class modifier_panic extends ModifierSpeed {
     // Set state
-    CheckState(): Record<modifierstate, boolean> {
+    CheckState(): Partial<Record<modifierstate, boolean>> {
         return {
             [modifierstate.MODIFIER_STATE_COMMAND_RESTRICTED]: true,
         };
@@ -27,8 +27,8 @@ class modifier_panic extends Modifier_Speed {
     }
 
     // Run when modifier instance is created
-    OnCreated(params: table): void {
-        // Think every second
+    OnCreated(): void {
+        // Think every 0.3 seconds
         this.StartIntervalThink(0.3);
     }
 

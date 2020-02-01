@@ -3,7 +3,7 @@
 import "./lib/timers";
 import { GameMode } from "./GameMode";
 
-Object.assign(getfenv(1), {
+Object.assign(getfenv(), {
     Activate: GameMode.Activate,
     Precache: GameMode.Precache,
 });
