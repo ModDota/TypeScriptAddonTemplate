@@ -26,7 +26,14 @@ export class BaseModifierMotionVertical extends BaseModifier {}
 export interface BaseModifierMotionBoth extends CDOTA_Modifier_Lua_Motion_Both {}
 export class BaseModifierMotionBoth extends BaseModifier {}
 
-export const registerAbility = (name: string) => (ability: new () => CDOTA_Ability_Lua | CDOTA_Item_Lua) => {
+export const registerAbility = (name?: string) => (ability: new () => CDOTA_Ability_Lua | CDOTA_Item_Lua) => {
+    if (name !== undefined) {
+        // @ts-ignore
+        ability.name = name;
+    } else {
+        name = ability.name;
+    }
+
     const [env] = getFileScope();
 
     if (env[name]) {
@@ -47,7 +54,7 @@ export const registerAbility = (name: string) => (ability: new () => CDOTA_Abili
 };
 
 export const registerModifier = (name?: string) => (modifier: new () => CDOTA_Modifier_Lua) => {
-    if (name) {
+    if (name !== undefined) {
         // @ts-ignore
         modifier.name = name;
     } else {
