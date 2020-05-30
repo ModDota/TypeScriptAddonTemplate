@@ -1,5 +1,3 @@
-// Temporary workaround for https://github.com/microsoft/TypeScript/issues/35973
-// @ts-ignore
 import "./lib/timers";
 import { GameMode } from "./GameMode";
 
