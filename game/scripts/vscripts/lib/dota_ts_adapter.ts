@@ -45,7 +45,7 @@ export const registerAbility = (name?: string) => (ability: new () => CDOTA_Abil
     toDotaClassInstance(env[name], ability);
 
     const originalSpawn = env[name].Spawn;
-    env[name].Spawn = function() {
+    env[name].Spawn = function () {
         this.____constructor();
         if (originalSpawn) {
             originalSpawn.call(this);
@@ -73,7 +73,7 @@ export const registerModifier = (name?: string) => (modifier: new () => CDOTA_Mo
     toDotaClassInstance(env[name], modifier);
 
     const originalOnCreated = env[name].OnCreated;
-    env[name].OnCreated = function(parameters: any) {
+    env[name].OnCreated = function (parameters: any) {
         this.____constructor();
         if (originalOnCreated) {
             originalOnCreated.call(this, parameters);

@@ -6,7 +6,5 @@ GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_FLYOUT_SCOREBO
 GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_TOP_BAR_BACKGROUND, false);
 GameUI.SetDefaultUIEnabled(DotaDefaultUIElement_t.DOTA_DEFAULT_UI_TOP_HEROES, false);
 
-const hudRoot = $.GetContextPanel()
-    .GetParent()!
-    .GetParent()!;
+const hudRoot = $.GetContextPanel().GetParent()!.GetParent()!;
 hudRoot.FindChildTraverse("quickstats")!.style.visibility = "collapse";
