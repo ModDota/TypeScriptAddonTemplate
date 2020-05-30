@@ -1,5 +1,5 @@
 import { reloadable } from "./lib/tstl-utils";
-import { modifier_panic } from "./modifiers/modifier_panic";
+import "./modifiers/modifier_panic";
 
 const heroSelectionTime = 10;
 
@@ -68,7 +68,7 @@ export class GameMode {
         const unit = EntIndexToHScript(event.entindex) as CDOTA_BaseNPC; // Cast to npc since this is the 'npc_spawned' event
         if (unit.IsRealHero()) {
             Timers.CreateTimer(1, () => {
-                modifier_panic.apply(unit, undefined, undefined, { duration: 8 });
+                unit.AddNewModifier(unit, undefined, "modifier_panic", { duration: 8 });
             });
 
             if (!unit.HasAbility("meepo_earthbind_ts_example")) {
