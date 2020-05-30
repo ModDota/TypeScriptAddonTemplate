@@ -12,7 +12,7 @@ class ModifierSpeed extends BaseModifier {
     }
 }
 
-@registerModifier("modifier_panic")
+@registerModifier()
 export class modifier_panic extends ModifierSpeed {
     // Set state
     CheckState(): Partial<Record<modifierstate, boolean>> {

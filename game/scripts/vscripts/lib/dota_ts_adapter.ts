@@ -46,8 +46,13 @@ export const registerAbility = (name: string) => (ability: new () => CDOTA_Abili
     };
 };
 
-export const registerModifier = (name: string) => (modifier: new () => CDOTA_Modifier_Lua) => {
-    (modifier as any).name = name;
+export const registerModifier = (name?: string) => (modifier: new () => CDOTA_Modifier_Lua) => {
+    if (name) {
+        // @ts-ignore
+        modifier.name = name;
+    } else {
+        name = modifier.name;
+    }
 
     const [env, source] = getFileScope();
     const [fileName] = string.gsub(source, ".*scripts[\\/]vscripts[\\/]", "");
