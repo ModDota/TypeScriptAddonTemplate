@@ -1,9 +1,7 @@
-// Temporary workaround for https://github.com/microsoft/TypeScript/issues/35973
-// @ts-ignore
 import "./lib/timers";
 import { GameMode } from "./GameMode";
 
-Object.assign(getfenv(1), {
+Object.assign(getfenv(), {
     Activate: GameMode.Activate,
     Precache: GameMode.Precache,
 });

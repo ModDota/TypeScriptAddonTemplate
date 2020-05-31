@@ -1,3 +1,0 @@
-[submodule "game/scripts/declarations"]
-	path = game/scripts/declarations
-	url = https://github.com/TypeScriptToLua/Dota2Declarations

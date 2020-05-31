@@ -1,9 +1,10 @@
 {
     "compilerOptions": {
-        "rootDir": "vscripts",
+        "rootDir": ".",
         "target": "esnext",
         "lib": ["esnext"],
-        "types": ["lua-types/jit"],
+        "types": ["dota-lua-types"],
+        "plugins": [{ "transform": "dota-lua-types/transformer" }],
         "moduleResolution": "node",
         "experimentalDecorators": true,
         "strict": true
