@@ -44,7 +44,7 @@ export const registerAbility = (name?: string) => (ability: new () => CDOTA_Abil
 
     toDotaClassInstance(env[name], ability);
 
-    const originalSpawn = env[name].Spawn;
+    const originalSpawn = (env[name] as CDOTA_Ability_Lua).Spawn;
     env[name].Spawn = function () {
         this.____constructor();
         if (originalSpawn) {
@@ -72,7 +72,7 @@ export const registerModifier = (name?: string) => (modifier: new () => CDOTA_Mo
 
     toDotaClassInstance(env[name], modifier);
 
-    const originalOnCreated = env[name].OnCreated;
+    const originalOnCreated = (env[name] as CDOTA_Modifier_Lua).OnCreated;
     env[name].OnCreated = function (parameters: any) {
         this.____constructor();
         if (originalOnCreated) {
