@@ -101,6 +101,10 @@ function clearTable(table: object) {
     for (const key in table) {
         delete (table as any)[key];
     }
+
+    // Remove metatable added by ExtendInstance
+    // https://github.com/SteamDatabase/GameTracking-Dota2/blob/7edcaa294bdcf493df0846f8bbcd4d47a5c3bd57/game/core/scripts/vscripts/init.lua#L195
+    setmetatable(table, undefined);
 }
 
 function getFileScope(): [any, string] {
