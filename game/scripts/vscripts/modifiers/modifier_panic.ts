@@ -28,8 +28,10 @@ export class modifier_panic extends ModifierSpeed {
 
     // Run when modifier instance is created
     OnCreated(): void {
-        // Think every 0.3 seconds
-        this.StartIntervalThink(0.3);
+        if (IsServer()) {
+            // Think every 0.3 seconds
+            this.StartIntervalThink(0.3);
+        }
     }
 
     // Called when intervalThink is triggered
