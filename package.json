@@ -1,5 +1,6 @@
 {
     "name": "",
+    "private": true,
     "scripts": {
         "postinstall": "node scripts/install.js",
         "launch": "node scripts/launch.js",
