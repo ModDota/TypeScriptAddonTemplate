@@ -5,11 +5,11 @@
         "postinstall": "node scripts/install.js",
         "launch": "node scripts/launch.js",
         "build": "run-p build:*",
-        "build:panorama": "tsc --project content/panorama/scripts/custom_game/tsconfig.json",
-        "build:vscripts": "tstl --project game/scripts/vscripts/tsconfig.json",
+        "build:panorama": "tsc --project content/panorama/scripts_ts/custom_game/tsconfig.json",
+        "build:vscripts": "tstl --project game/scripts/vscripts_ts/tsconfig.json",
         "dev": "run-p dev:*",
-        "dev:panorama": "tsc --project content/panorama/scripts/custom_game/tsconfig.json --watch",
-        "dev:vscripts": "tstl --project game/scripts/vscripts/tsconfig.json --watch"
+        "dev:panorama": "tsc --project content/panorama/scripts_ts/custom_game/tsconfig.json --watch",
+        "dev:vscripts": "tstl --project game/scripts/vscripts_ts/tsconfig.json --watch"
     },
     "devDependencies": {
         "@moddota/dota-lua-types": "^4.10.0",
