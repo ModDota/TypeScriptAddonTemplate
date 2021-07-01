@@ -1,248 +1,286 @@
-TIMERS_VERSION = "1.02"
+TIMERS_VERSION = "1.06"
 
 --[[
 
-  -- A timer running every second that starts immediately on the next frame, respects pauses
-  Timers:CreateTimer(function()
-      print ("Hello. I'm running immediately and then every second thereafter.")
-      return 1.0
-    end
-  )
+	1.06 modified by Celireor (now uses binary heap priority queue instead of iteration to determine timer of shortest duration)
 
-  -- A timer running every second that starts 5 seconds in the future, respects pauses
-  Timers:CreateTimer(5, function()
-      print ("Hello. I'm running 5 seconds after you called me and then every second thereafter.")
-      return 1.0
-    end
-  )
+	DO NOT MODIFY A REALTIME TIMER TO USE GAMETIME OR VICE VERSA MIDWAY WITHOUT FIRST REMOVING AND RE-ADDING THE TIMER
 
-  -- 10 second delayed, run once using gametime (respect pauses)
-  Timers:CreateTimer({
-    endTime = 10, -- when this timer should first execute, you can omit this if you want it to run first on the next frame
-    callback = function()
-      print ("Hello. I'm running 10 seconds after when I was started.")
-    end
-  })
+	-- A timer running every second that starts immediately on the next frame, respects pauses
+	Timers:CreateTimer(function()
+			print ("Hello. I'm running immediately and then every second thereafter.")
+			return 1.0
+		end
+	)
 
-  -- 10 second delayed, run once regardless of pauses
-  Timers:CreateTimer({
-    useGameTime = false,
-    endTime = 10, -- when this timer should first execute, you can omit this if you want it to run first on the next frame
-    callback = function()
-      print ("Hello. I'm running 10 seconds after I was started even if someone paused the game.")
-    end
-  })
+	-- The same timer as above with a shorthand call
+	Timers(function()
+		print ("Hello. I'm running immediately and then every second thereafter.")
+		return 1.0
+	end)
 
 
-  -- A timer running every second that starts after 2 minutes regardless of pauses
-  Timers:CreateTimer("uniqueTimerString3", {
-    useGameTime = false,
-    endTime = 120,
-    callback = function()
-      print ("Hello. I'm running after 2 minutes and then every second thereafter.")
-      return 1
-    end
-  })
+	-- A timer which calls a function with a table context
+	Timers:CreateTimer(GameMode.someFunction, GameMode)
+
+	-- A timer running every second that starts 5 seconds in the future, respects pauses
+	Timers:CreateTimer(5, function()
+			print ("Hello. I'm running 5 seconds after you called me and then every second thereafter.")
+			return 1.0
+		end
+	)
+
+	-- 10 second delayed, run once using gametime (respect pauses)
+	Timers:CreateTimer({
+		endTime = 10, -- when this timer should first execute, you can omit this if you want it to run first on the next frame
+		callback = function()
+			print ("Hello. I'm running 10 seconds after when I was started.")
+		end
+	})
+
+	-- 10 second delayed, run once regardless of pauses
+	Timers:CreateTimer({
+		useGameTime = false,
+		endTime = 10, -- when this timer should first execute, you can omit this if you want it to run first on the next frame
+		callback = function()
+			print ("Hello. I'm running 10 seconds after I was started even if someone paused the game.")
+		end
+	})
 
 
-  -- A timer using the old style to repeat every second starting 5 seconds ahead
-  Timers:CreateTimer("uniqueTimerString3", {
-    useOldStyle = true,
-    endTime = GameRules:GetGameTime() + 5,
-    callback = function()
-      print ("Hello. I'm running after 5 seconds and then every second thereafter.")
-      return GameRules:GetGameTime() + 1
-    end
-  })
+	-- A timer running every second that starts after 2 minutes regardless of pauses
+	Timers:CreateTimer("uniqueTimerString3", {
+		useGameTime = false,
+		endTime = 120,
+		callback = function()
+			print ("Hello. I'm running after 2 minutes and then every second thereafter.")
+			return 1
+		end
+	})
 
 ]]
+
+-- Binary Heap implementation copy-pasted from https://gist.github.com/starwing/1757443a1bd295653c39
+-- BinaryHeap[1] always points to the element with the lowest "key" variable
+-- API
+-- BinaryHeap(key) - Creates a new BinaryHeap with key. The key is the name of the integer variable used to sort objects.
+-- BinaryHeap:Insert - Inserts an object into BinaryHeap
+-- BinaryHeap:Remove - Removes an object from BinaryHeap
+
+BinaryHeap = BinaryHeap or {}
+BinaryHeap.__index = BinaryHeap
+
+function BinaryHeap:Insert(item)
+	local index = #self + 1
+	local key = self.key
+	item.index = index
+	self[index] = item
+	while index > 1 do
+		local parent = math.floor(index/2)
+		if self[parent][key] <= item[key] then
+			break
+		end
+		self[index], self[parent] = self[parent], self[index]
+		self[index].index = index
+		self[parent].index = parent
+		index = parent
+	end
+	return item
+end
+
+function BinaryHeap:Remove(item)
+	local index = item.index
+	if self[index] ~= item then return end
+	local key = self.key
+	local heap_size = #self
+	if index == heap_size then
+		self[heap_size] = nil
+		return
+	end
+	self[index] = self[heap_size]
+	self[index].index = index
+	self[heap_size] = nil
+	while true do
+		local left = index*2
+		local right = left + 1
+		if not self[left] then break end
+		local newindex = right
+		if self[index][key] >= self[left][key] then
+			if not self[right] or self[left][key] < self[right][key] then
+				newindex = left
+			end
+		elseif not self[right] or self[index][key] <= self[right][key] then
+			break
+		end
+		self[index], self[newindex] = self[newindex], self[index]
+		self[index].index = index
+		self[newindex].index = newindex
+		index = newindex
+	end
+end
+
+setmetatable(BinaryHeap, {__call = function(self, key) return setmetatable({key=key}, self) end})
+
 
 TIMERS_THINK = 0.01
 
 if Timers == nil then
-  print ( '[Timers] creating Timers' )
-  Timers = {}
-  Timers.__index = Timers
-end
-
-function Timers:new( o )
-  o = o or {}
-  setmetatable( o, Timers )
-  return o
-end
-
-function Timers:_xpcall (f, ...)
-  print(f)
-  print({...})
-  PrintTable({...})
-  local result = xpcall (function () return f(unpack(arg)) end,
-    function (msg)
-      -- build the error message
-      return msg..'\n'..debug.traceback()..'\n'
-    end)
-
-  print(result)
-  PrintTable(result)
-  if not result[1] then
-    -- throw an error
-  end
-  -- remove status code
-  table.remove (result, 1)
-  return unpack (result)
+	print ( '[Timers] creating Timers' )
+	Timers = {}
+	setmetatable(Timers, {
+		__call = function(t, ...)
+			return t:CreateTimer(...)
+		end
+	})
+	--Timers.__index = Timers
 end
 
 function Timers:start()
-  Timers = self
-  self.timers = {}
+	self.started = true
+	Timers = self
+	self:InitializeTimers()
+	self.nextTickCallbacks = {}
 
-  local ent = Entities:CreateByClassname("info_target") -- Entities:FindByClassname(nil, 'CWorld')
-  ent:SetThink("Think", self, "timers", TIMERS_THINK)
+	local ent = SpawnEntityFromTableSynchronous("info_target", {targetname="timers_lua_thinker"})
+	ent:SetThink("Think", self, "timers", TIMERS_THINK)
 end
 
 function Timers:Think()
-  if GameRules:State_Get() >= DOTA_GAMERULES_STATE_POST_GAME then
-    return
-  end
+	local nextTickCallbacks = table.merge({}, Timers.nextTickCallbacks)
+	Timers.nextTickCallbacks = {}
+	for _, cb in ipairs(nextTickCallbacks) do
+		local status, result = xpcall(cb, debug.traceback)
+		if not status then
+			Timers:HandleEventError(result)
+		end
+	end
+	if GameRules:State_Get() >= DOTA_GAMERULES_STATE_POST_GAME then
+		return
+	end
 
-  -- Track game time, since the dt passed in to think is actually wall-clock time not simulation time.
-  local now = GameRules:GetGameTime()
+	-- Track game time, since the dt passed in to think is actually wall-clock time not simulation time.
+	local now = GameRules:GetGameTime()
 
-  -- Process timers
-  for k,v in pairs(Timers.timers) do
-    local bUseGameTime = true
-    if v.useGameTime ~= nil and v.useGameTime == false then
-      bUseGameTime = false
-    end
-    local bOldStyle = false
-    if v.useOldStyle ~= nil and v.useOldStyle == true then
-      bOldStyle = true
-    end
+	-- Process timers
+	self:ExecuteTimers(self.realTimeHeap, Time())
+	self:ExecuteTimers(self.gameTimeHeap, GameRules:GetGameTime())
 
-    local now = GameRules:GetGameTime()
-    if not bUseGameTime then
-      now = Time()
-    end
-
-    if v.endTime == nil then
-      v.endTime = now
-    end
-    -- Check if the timer has finished
-    if now >= v.endTime then
-      -- Remove from timers list
-      Timers.timers[k] = nil
-
-      -- Run the callback
-      local status, nextCall
-      if v.context then
-        status, nextCall = xpcall(function() return v.callback(v.context, v) end, function (msg)
-                                    return msg..'\n'..debug.traceback()..'\n'
-                                  end)
-      else
-        status, nextCall = xpcall(function() return v.callback(v) end, function (msg)
-                                    return msg..'\n'..debug.traceback()..'\n'
-                                  end)
-      end
-
-      -- Make sure it worked
-      if status then
-        -- Check if it needs to loop
-        if nextCall then
-          -- Change its end time
-
-          if bOldStyle then
-            v.endTime = v.endTime + nextCall - now
-          else
-            v.endTime = v.endTime + nextCall
-          end
-
-          Timers.timers[k] = v
-        end
-
-        -- Update timer data
-        --self:UpdateTimerData()
-      else
-        -- Nope, handle the error
-        Timers:HandleEventError('Timer', k, nextCall)
-      end
-    end
-  end
-
-  return TIMERS_THINK
+	return TIMERS_THINK
 end
 
-function Timers:HandleEventError(name, event, err)
-  print(err)
+function Timers:ExecuteTimers(timerList, now)
+	--Empty timer, ignore
+	if not timerList[1] then return end
 
-  -- Ensure we have data
-  name = tostring(name or 'unknown')
-  event = tostring(event or 'unknown')
-  err = tostring(err or 'unknown')
+	--Timers are alr. sorted by end time upon insertion
+	local currentTimer = timerList[1]
 
-  -- Tell everyone there was an error
-  --Say(nil, name .. ' threw an error on event '..event, false)
-  --Say(nil, err, false)
+	currentTimer.endTime = currentTimer.endTime or now
+	--Check if timer has finished
+	if now >= currentTimer.endTime then
+		-- Remove from timers list
+		timerList:Remove(currentTimer)
+		Timers.runningTimer = k
+		Timers.removeSelf = false
 
-  -- Prevent loop arounds
-  if not self.errorHandled then
-    -- Store that we handled an error
-    self.errorHandled = true
-  end
+		-- Run the callback
+		local status, timerResult
+		if currentTimer.context then
+			status, timerResult = xpcall(function() return currentTimer.callback(currentTimer.context, currentTimer) end, debug.traceback)
+		else
+			status, timerResult = xpcall(function() return currentTimer.callback(currentTimer) end, debug.traceback)
+		end
+
+		Timers.runningTimer = nil
+
+		-- Make sure it worked
+		if status then
+			-- Check if it needs to loop
+			if timerResult and not Timers.removeSelf then
+				-- Change its end time
+
+				currentTimer.endTime = currentTimer.endTime + timerResult
+
+				timerList:Insert(currentTimer)
+			end
+
+			-- Update timer data
+			--self:UpdateTimerData()
+		else
+			-- Nope, handle the error
+			Timers:HandleEventError(timerResult)
+		end
+		--run again!
+		self:ExecuteTimers(timerList, now)
+	end
 end
 
-function Timers:CreateTimer(name, args, context)
-  if type(name) == "function" then
-    if args ~= nil then
-      context = args
-    end
-    args = {callback = name}
-    name = DoUniqueString("timer")
-  elseif type(name) == "table" then
-    args = name
-    name = DoUniqueString("timer")
-  elseif type(name) == "number" then
-    args = {endTime = name, callback = args}
-    name = DoUniqueString("timer")
-  end
-  if not args.callback then
-    print("Invalid timer created: "..name)
-    return
-  end
+function Timers:HandleEventError(err)
+	if IsInToolsMode() then
+		print(err)
+	else
+		StatsClient:HandleError(err)
+	end
+end
 
+function Timers:CreateTimer(arg1, arg2, context)
+	local timer
+	if type(arg1) == "function" then
+		if arg2 ~= nil then
+			context = arg2
+		end
+		timer = {callback = arg1}
+	elseif type(arg1) == "table" then
+		timer = arg1
+	elseif type(arg1) == "number" then
+		timer = {endTime = arg1, callback = arg2}
+	end
+	if not timer.callback then
+		print("Invalid timer created")
+		return
+	end
 
-  local now = GameRules:GetGameTime()
-  if args.useGameTime ~= nil and args.useGameTime == false then
-    now = Time()
-  end
+	local now = GameRules:GetGameTime()
+	local timerHeap = self.gameTimeHeap
+	if timer.useGameTime ~= nil and timer.useGameTime == false then
+		now = Time()
+		timerHeap = self.realTimeHeap
+	end
 
-  if args.endTime == nil then
-    args.endTime = now
-  elseif args.useOldStyle == nil or args.useOldStyle == false then
-    args.endTime = now + args.endTime
-  end
+	if timer.endTime == nil then
+		timer.endTime = now
+	else
+		timer.endTime = now + timer.endTime
+	end
 
-  args.context = context
+	timer.context = context
 
-  Timers.timers[name] = args
+	timerHeap:Insert(timer)
 
-  return name
+	return timer
+end
+
+function Timers:NextTick(callback)
+	table.insert(Timers.nextTickCallbacks, callback)
 end
 
 function Timers:RemoveTimer(name)
-  Timers.timers[name] = nil
+	local timerHeap = self.gameTimeHeap
+	if name.useGameTime ~= nil and name.useGameTime == false then
+		timerHeap = self.realTimeHeap
+	end
+
+	timerHeap:Remove(name)
+	if Timers.runningTimer == name then
+		Timers.removeSelf = true
+	end
 end
 
-function Timers:RemoveTimers(killAll)
-  local timers = {}
-
-  if not killAll then
-    for k,v in pairs(Timers.timers) do
-      if v.persist then
-        timers[k] = v
-      end
-    end
-  end
-
-  Timers.timers = timers
+function Timers:InitializeTimers()
+	self.realTimeHeap = BinaryHeap("endTime")
+	self.gameTimeHeap = BinaryHeap("endTime")
 end
 
-if not Timers.timers then Timers:start() end
+if not Timers.started then Timers:start() end
+
+GameRules.Timers = Timers
