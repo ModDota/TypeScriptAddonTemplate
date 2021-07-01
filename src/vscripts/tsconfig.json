@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
         "rootDir": ".",
+        "outDir": "../../game/scripts/vscripts",
         "target": "esnext",
         "lib": ["esnext"],
         "types": ["@moddota/dota-lua-types"],
@@ -12,5 +13,6 @@
     "tstl": {
         "luaTarget": "JIT",
         "sourceMapTraceback": true
-    }
+    },
+    "include": ["**/*.ts", "../common/**/*.ts"]
 }

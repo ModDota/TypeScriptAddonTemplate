@@ -15,6 +15,11 @@ A template for Dota 2 Custom Games built with modern technologies. It includes
 
 After that you can press `Ctrl+Shift+B` in VSCode or run `npm run dev` command in terminal to compile your code and watch for changes.
 
+## Contents:
+
+* **[src/vscripts]:** TypeScript code Dota addon (Lua) scripts. Compiles lua to game/scripts/vscripts.
+* **[src/panorama]:** TypeScript code for panorama UI
+
 ## Continuous Integration
 
 This template includes a [GitHub Actions](https://github.com/features/actions) [workflow](.github/workflows/ci.yml) that builds your custom game on every commit and fails when there are type errors.

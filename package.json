@@ -8,8 +8,8 @@
         "build:panorama": "tsc --project content/panorama/scripts/custom_game/tsconfig.json",
         "build:vscripts": "tstl --project game/scripts/vscripts/tsconfig.json",
         "dev": "run-p dev:*",
-        "dev:panorama": "tsc --project content/panorama/scripts/custom_game/tsconfig.json --watch",
-        "dev:vscripts": "tstl --project game/scripts/vscripts/tsconfig.json --watch"
+        "dev:panorama": "tsc --project src/panorama/tsconfig.json --watch",
+        "dev:vscripts": "tstl --project src/vscripts/tsconfig.json --watch"
     },
     "devDependencies": {
         "@moddota/dota-lua-types": "^4.11.0",

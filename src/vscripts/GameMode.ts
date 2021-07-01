@@ -1,7 +1,7 @@
 import { reloadable } from "./lib/tstl-utils";
-import "./modifiers/modifier_panic";
+import { modifier_panic } from "./modifiers/modifier_panic";
 
-const heroSelectionTime = 10;
+const heroSelectionTime = 20;
 
 declare global {
     interface CDOTAGamerules {
@@ -17,6 +17,7 @@ export class GameMode {
     }
 
     public static Activate(this: void) {
+        // When the addon activates, create a new instance of this GameMode class.
         GameRules.Addon = new GameMode();
     }
 
@@ -44,8 +45,17 @@ export class GameMode {
             }
         }
 
+        if (state === DOTA_GameState.DOTA_GAMERULES_STATE_CUSTOM_GAME_SETUP) {
+            // Automatically skip setup in tools
+            if (IsInToolsMode()) {
+                Timers.CreateTimer(3, () => {
+                    GameRules.FinishCustomGameSetup();
+                });
+            }
+        }
+
         // Start game once pregame hits
-        if (state == DOTA_GameState.DOTA_GAMERULES_STATE_PRE_GAME) {
+        if (state === DOTA_GameState.DOTA_GAMERULES_STATE_PRE_GAME) {
             Timers.CreateTimer(0.2, () => this.StartGame());
         }
     }
@@ -68,7 +78,7 @@ export class GameMode {
         const unit = EntIndexToHScript(event.entindex) as CDOTA_BaseNPC; // Cast to npc since this is the 'npc_spawned' event
         if (unit.IsRealHero()) {
             Timers.CreateTimer(1, () => {
-                unit.AddNewModifier(unit, undefined, "modifier_panic", { duration: 8 });
+                unit.AddNewModifier(unit, undefined, modifier_panic.name, { duration: 8 });
             });
 
             if (!unit.HasAbility("meepo_earthbind_ts_example")) {
