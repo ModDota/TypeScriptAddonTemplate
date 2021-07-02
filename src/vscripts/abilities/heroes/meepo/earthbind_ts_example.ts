@@ -40,7 +40,7 @@ export class meepo_earthbind_ts_example extends BaseAbility {
         const radius = this.GetSpecialValueFor("radius");
         this.particle = ParticleManager.CreateParticle(
             "particles/units/heroes/hero_meepo/meepo_earthbind_projectile_fx.vpcf",
-            ParticleAttachment_t.PATTACH_CUSTOMORIGIN,
+            ParticleAttachment.CUSTOMORIGIN,
             caster,
         );
 
@@ -57,9 +57,9 @@ export class meepo_earthbind_ts_example extends BaseAbility {
             fEndRadius: radius,
             Source: caster,
             bHasFrontalCone: false,
-            iUnitTargetTeam: DOTA_UNIT_TARGET_TEAM.DOTA_UNIT_TARGET_TEAM_NONE,
-            iUnitTargetFlags: DOTA_UNIT_TARGET_FLAGS.DOTA_UNIT_TARGET_FLAG_NONE,
-            iUnitTargetType: DOTA_UNIT_TARGET_TYPE.DOTA_UNIT_TARGET_NONE,
+            iUnitTargetTeam: UnitTargetTeam.NONE,
+            iUnitTargetFlags: UnitTargetFlags.NONE,
+            iUnitTargetType: UnitTargetType.NONE,
             vVelocity: (direction * projectileSpeed) as Vector,
             bProvidesVision: true,
             iVisionRadius: radius,
@@ -77,9 +77,9 @@ export class meepo_earthbind_ts_example extends BaseAbility {
             location,
             undefined,
             radius,
-            DOTA_UNIT_TARGET_TEAM.DOTA_UNIT_TARGET_TEAM_ENEMY,
-            DOTA_UNIT_TARGET_TYPE.DOTA_UNIT_TARGET_BASIC | DOTA_UNIT_TARGET_TYPE.DOTA_UNIT_TARGET_HERO,
-            DOTA_UNIT_TARGET_FLAGS.DOTA_UNIT_TARGET_FLAG_NONE,
+            UnitTargetTeam.ENEMY,
+            UnitTargetType.BASIC | UnitTargetType.HERO,
+            UnitTargetFlags.NONE,
             0,
             false,
         );

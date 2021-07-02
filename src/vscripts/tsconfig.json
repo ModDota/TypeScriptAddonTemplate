@@ -1,9 +1,10 @@
 {
     "compilerOptions": {
         "rootDir": ".",
+        "outDir": "../../game/scripts/vscripts",
         "target": "esnext",
         "lib": ["esnext"],
-        "types": ["@moddota/dota-lua-types"],
+        "types": ["@moddota/dota-lua-types/normalized"],
         "plugins": [{ "transform": "@moddota/dota-lua-types/transformer" }],
         "moduleResolution": "node",
         "experimentalDecorators": true,
@@ -12,5 +13,6 @@
     "tstl": {
         "luaTarget": "JIT",
         "sourceMapTraceback": true
-    }
+    },
+    "include": ["**/*.ts", "../common/**/*.ts"]
 }
