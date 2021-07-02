@@ -1,10 +1,17 @@
 $.Msg("Hud panorama loaded");
 
-GameEvents.Subscribe("my_custom_event", event => {
-    $.Msg("Received custom event", event);
-});
+function OnCloseButtonClicked() {
+    $.Msg("Example close button clicked");
 
-GameEvents.SendCustomGameEventToServer<{}>("ui_loaded", {});
+    // Find panel by id
+    const examplePanel = $("#ExamplePanel");
+
+    // Remove panel
+    examplePanel.DeleteAsync(0);
+
+    // Send event to server
+    GameEvents.SendCustomGameEventToServer("ui_panel_closed", {});
+}
 
 GameEvents.Subscribe("example_event", (data: NetworkedData<ExampleEventData>) => {
     const myNumber = data.myNumber;
@@ -15,6 +22,8 @@ GameEvents.Subscribe("example_event", (data: NetworkedData<ExampleEventData>) =>
     const myArrayObject = data.myArrayOfNumbers; // After sending this is now an object!
 
     const myArray = toArray(myArrayObject); // We can turn it back into an array ourselves.
+
+    $.Msg("Received example event", myNumber, myString, myBoolean, myArrayObject, myArray);
 
 });
 

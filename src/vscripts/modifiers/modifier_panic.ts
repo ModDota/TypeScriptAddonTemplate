@@ -3,8 +3,8 @@ import { BaseModifier, registerModifier } from "../lib/dota_ts_adapter";
 // Base speed modifier -- Could be moved to a separate file
 class ModifierSpeed extends BaseModifier {
     // Declare functions
-    DeclareFunctions(): modifierfunction[] {
-        return [modifierfunction.MODIFIER_PROPERTY_MOVESPEED_ABSOLUTE];
+    DeclareFunctions(): ModifierFunction[] {
+        return [ModifierFunction.MOVESPEED_ABSOLUTE];
     }
 
     GetModifierMoveSpeed_Absolute(): number {
@@ -17,7 +17,7 @@ export class modifier_panic extends ModifierSpeed {
     // Set state
     CheckState(): Partial<Record<modifierstate, boolean>> {
         return {
-            [modifierstate.MODIFIER_STATE_COMMAND_RESTRICTED]: true,
+            [ModifierState.COMMAND_RESTRICTED]: true,
         };
     }
 

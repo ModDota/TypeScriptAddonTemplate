@@ -2,3 +2,57 @@
     width: 100%;
     height: 100%;
 }
+
+#ExamplePanel {
+    width: 500px;
+    height: 500px;
+    /* Using a background image already in dota */
+    background-image: url("s2r://panorama/images/compendium/international2020/compendium/dashboard_panel_bg_psd.vtex");
+
+    horizontal-align: center;
+    vertical-align: center;
+}
+
+#ExamplePanel #BannerImage {
+    width: 200px;
+    height: 200px;
+    horizontal-align: center;
+    y: 40px;
+}
+
+#ExamplePanel .ExampleTitle {
+    horizontal-align: center;
+    font-size: 30px;
+    y: 260px;
+}
+
+#ExamplePanel .ExampleParagraph {
+    y: 320px;
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+#ExamplePanel #CloseButton {
+    width: 100px;
+    height: 50px;
+    background-color: rgb(228, 228, 228);
+    horizontal-align: center;
+    vertical-align: bottom;
+    y: -30px;
+}
+
+#ExamplePanel #CloseButton Label {
+    horizontal-align: center;
+    vertical-align: center;
+    color: black;
+}
+
+#ExamplePanel #CloseButton:hover {
+    background-color: rgb(0, 135, 245);
+}
+
+#ExamplePanel #CloseButton:hover Label {
+    color: white;
+}
+
+

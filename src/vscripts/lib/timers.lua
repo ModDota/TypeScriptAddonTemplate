@@ -121,6 +121,13 @@ end
 
 setmetatable(BinaryHeap, {__call = function(self, key) return setmetatable({key=key}, self) end})
 
+function table.merge(input1, input2)
+	for i,v in pairs(input2) do
+		input1[i] = v
+	end
+	return input1
+end
+
 
 TIMERS_THINK = 0.01
 

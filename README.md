@@ -1,6 +1,10 @@
 # ModDota template
 
-A template for Dota 2 Custom Games built with modern technologies. It includes
+A template for Dota 2 Custom Games built with modern technologies.
+
+[This tutorial](https://moddota.com/scripting/Typescript/typescript-introduction/) explains how to set up and use the template.
+
+The template includes:
 
 - [TypeScript for Panorama](https://moddota.com/panorama/introduction-to-panorama-ui-with-typescript)
 - [TypeScript for VScripts](https://typescripttolua.github.io/)
