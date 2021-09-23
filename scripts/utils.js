@@ -1,4 +1,4 @@
-const { findSteamAppByName, SteamNotFoundError } = require("find-steam-app");
+const { findSteamAppByName, SteamNotFoundError } = require("@moddota/find-steam-app");
 const packageJson = require("../package.json");
 
 module.exports.getAddonName = () => {
