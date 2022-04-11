@@ -4,7 +4,7 @@ import { modifier_panic } from "./modifiers/modifier_panic";
 const heroSelectionTime = 20;
 
 declare global {
-    interface CDOTAGamerules {
+    interface CDOTAGameRules {
         Addon: GameMode;
     }
 }
