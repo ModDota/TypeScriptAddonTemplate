@@ -41,11 +41,7 @@ export const registerAbility = (name?: string) => (ability: new () => CDOTA_Abil
 
     const [env] = getFileScope();
 
-    if (env[name]) {
-        clearTable(env[name]);
-    } else {
-        env[name] = {};
-    }
+    env[name] = {};
 
     toDotaClassInstance(env[name], ability);
 
@@ -69,11 +65,7 @@ export const registerModifier = (name?: string) => (modifier: new () => CDOTA_Mo
     const [env, source] = getFileScope();
     const [fileName] = string.gsub(source, ".*scripts[\\/]vscripts[\\/]", "");
 
-    if (env[name]) {
-        clearTable(env[name]);
-    } else {
-        env[name] = {};
-    }
+    env[name] = {};
 
     toDotaClassInstance(env[name], modifier);
 
