@@ -1,7 +1,7 @@
-TIMERS_VERSION = "1.06"
+TIMERS_VERSION = "1.07"
 
 --[[
-
+	1.07 modified by Perry (fixed stack overflow if lots of timers finish at the same time and removed HandleErrors throwing error outside tools mode)
 	1.06 modified by Celireor (now uses binary heap priority queue instead of iteration to determine timer of shortest duration)
 
 	DO NOT MODIFY A REALTIME TIMER TO USE GAMETIME OR VICE VERSA MIDWAY WITHOUT FIRST REMOVING AND RE-ADDING THE TIMER
@@ -132,7 +132,7 @@ end
 TIMERS_THINK = 0.01
 
 if Timers == nil then
-	print ( '[Timers] creating Timers' )
+	print ( '[Timers] creating Timers ['..TIMERS_VERSION..']' )
 	Timers = {}
 	setmetatable(Timers, {
 		__call = function(t, ...)
@@ -176,15 +176,11 @@ function Timers:Think()
 end
 
 function Timers:ExecuteTimers(timerList, now)
-	--Empty timer, ignore
-	if not timerList[1] then return end
-
 	--Timers are alr. sorted by end time upon insertion
 	local currentTimer = timerList[1]
 
-	currentTimer.endTime = currentTimer.endTime or now
 	--Check if timer has finished
-	if now >= currentTimer.endTime then
+	while currentTimer and (now >= currentTimer.endTime) do
 		-- Remove from timers list
 		timerList:Remove(currentTimer)
 		Timers.runningTimer = k
@@ -217,17 +213,16 @@ function Timers:ExecuteTimers(timerList, now)
 			-- Nope, handle the error
 			Timers:HandleEventError(timerResult)
 		end
-		--run again!
-		self:ExecuteTimers(timerList, now)
+		--Check next timer in heap
+		currentTimer = timerList[1]
 	end
 end
 
 function Timers:HandleEventError(err)
-	if IsInToolsMode() then
-		print(err)
-	else
-		StatsClient:HandleError(err)
-	end
+	print(err)
+	--if not IsInToolsMode() then
+		-- If you want to send errors from inside timers on live servers to your own webserver, do it here
+	--end
 end
 
 function Timers:CreateTimer(arg1, arg2, context)
