@@ -72,7 +72,7 @@ export const registerModifier = (name?: string) => (modifier: new () => CDOTA_Mo
     const originalOnCreated = (env[name] as CDOTA_Modifier_Lua).OnCreated;
     env[name].OnCreated = function (parameters: any) {
         this.____constructor();
-        if (originalOnCreated) {
+        if (originalOnCreated !== undefined) {
             originalOnCreated.call(this, parameters);
         }
     };
