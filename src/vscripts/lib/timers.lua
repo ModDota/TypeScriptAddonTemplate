@@ -183,7 +183,7 @@ function Timers:ExecuteTimers(timerList, now)
 	while currentTimer and (now >= currentTimer.endTime) do
 		-- Remove from timers list
 		timerList:Remove(currentTimer)
-		Timers.runningTimer = k
+		Timers.runningTimer = currentTimer
 		Timers.removeSelf = false
 
 		-- Run the callback
