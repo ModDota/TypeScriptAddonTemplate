@@ -3,8 +3,13 @@ if (global.reloadCache === undefined) {
     global.reloadCache = {};
 }
 
-export function reloadable<T extends { new (...args: any[]): {} }>(constructor: T): T {
-    const className = constructor.name;
+export function reloadable<T extends { new (...args: any[]): {} }>(constructor: T, context: ClassDecoratorContext): T {
+    const className = context.name;
+
+    if (className === undefined) {
+        throw "Cannot reload classes without names!";
+    }
+
     if (global.reloadCache[className] === undefined) {
         global.reloadCache[className] = constructor;
     }

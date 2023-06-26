@@ -29,14 +29,16 @@ export class BaseModifierMotionBoth extends BaseModifier {}
 // Add standard base classes to prototype chain to make `super.*` work as `self.BaseClass.*`
 setmetatable(BaseAbility.prototype, { __index: CDOTA_Ability_Lua ?? C_DOTA_Ability_Lua });
 setmetatable(BaseItem.prototype, { __index: CDOTA_Item_Lua ?? C_DOTA_Item_Lua });
-setmetatable(BaseModifier.prototype, { __index: CDOTA_Modifier_Lua ?? C_DOTA_Modifier_Lua });
+setmetatable(BaseModifier.prototype, { __index: CDOTA_Modifier_Lua ?? CDOTA_Modifier_Lua });
 
-export const registerAbility = (name?: string) => (ability: new () => CDOTA_Ability_Lua | CDOTA_Item_Lua) => {
+export const registerAbility = (name?: string) => (ability: new () => CDOTA_Ability_Lua | CDOTA_Item_Lua, context: ClassDecoratorContext) => {
     if (name !== undefined) {
         // @ts-ignore
         ability.name = name;
-    } else {
-        name = ability.name;
+    } if (context.name) {
+        name = context.name;   
+    }else {
+        throw "Unable to determine name of this ability class!";
     }
 
     const [env] = getFileScope();
@@ -54,12 +56,14 @@ export const registerAbility = (name?: string) => (ability: new () => CDOTA_Abil
     };
 };
 
-export const registerModifier = (name?: string) => (modifier: new () => CDOTA_Modifier_Lua) => {
+export const registerModifier = (name?: string) => (modifier: new () => CDOTA_Modifier_Lua, context: ClassDecoratorContext) => {
     if (name !== undefined) {
         // @ts-ignore
         modifier.name = name;
-    } else {
-        name = modifier.name;
+    } if (context.name) {
+        name = context.name;   
+    }else {
+        throw "Unable to determine name of this modifier class!";
     }
 
     const [env, source] = getFileScope();
