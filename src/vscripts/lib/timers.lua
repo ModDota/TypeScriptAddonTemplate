@@ -234,6 +234,9 @@ function Timers:CreateTimer(arg1, arg2, context)
 		timer = {callback = arg1}
 	elseif type(arg1) == "table" then
 		timer = arg1
+	elseif type(arg1) == "string" then
+		timer = arg2
+		timer.name = arg1
 	elseif type(arg1) == "number" then
 		timer = {endTime = arg1, callback = arg2}
 	end
@@ -268,14 +271,17 @@ end
 
 function Timers:RemoveTimer(name)
 	local timerHeap = self.gameTimeHeap
-	if name.useGameTime ~= nil and name.useGameTime == false then
+	local runningTimer = Timers.runningTimer
+	local hasMatch = runningTimer == name or runningTimer.name == name
+
+	if not hasMatch then return end
+
+	if runningTimer.useGameTime ~= nil and runningTimer.useGameTime == false then
 		timerHeap = self.realTimeHeap
 	end
 
-	timerHeap:Remove(name)
-	if Timers.runningTimer == name then
-		Timers.removeSelf = true
-	end
+	timerHeap:Remove(runningTimer)
+	Timers.removeSelf = true
 end
 
 function Timers:InitializeTimers()
