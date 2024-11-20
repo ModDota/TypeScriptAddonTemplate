@@ -7,7 +7,14 @@
     width: 500px;
     height: 500px;
     /* Using a background image already in dota */
-    background-image: url("s2r://panorama/images/compendium/international2020/compendium/dashboard_panel_bg_psd.vtex");
+    background-image: url("s2r://panorama/images/loadingscreens/international_2023_ls_3/loadingscreen.vtex");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+
+    border-style: solid;
+    border-width: 3px;
+    border-color: rgb(0, 0, 0);
 
     horizontal-align: center;
     vertical-align: center;
