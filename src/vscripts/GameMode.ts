@@ -43,7 +43,9 @@ export class GameMode {
 
             // Also apply the panic modifier to the sending player's hero
             const hero = player.GetAssignedHero();
-            hero.AddNewModifier(hero, undefined, modifier_panic.name, { duration: 5 });
+            if (hero != undefined) { // Hero didn't spawn yet or dead
+                hero.AddNewModifier(hero, undefined, modifier_panic.name, { duration: 5 });
+            }
         });
     }
 

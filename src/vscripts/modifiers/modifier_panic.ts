@@ -15,7 +15,7 @@ class ModifierSpeed extends BaseModifier {
 @registerModifier()
 export class modifier_panic extends ModifierSpeed {
     // Set state
-    CheckState(): Partial<Record<modifierstate, boolean>> {
+    CheckState(): Partial<Record<ModifierState, boolean>> {
         return {
             [ModifierState.COMMAND_RESTRICTED]: true,
         };

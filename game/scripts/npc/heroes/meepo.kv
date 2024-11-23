@@ -1,7 +1,7 @@
 ///                                                           ///
 /// ModDota AbilityLuaSpellLibrary spells for Meepo           ///
 ///                                                           ///
-/// Last Update: 7.07c                                        ///
+/// Last Update: 7.37e                                        ///
 ///                                                           ///
 
 "DOTAAbilities"
@@ -13,62 +13,48 @@
     {
         // General
         //-------------------------------------------------------------------------------------------------------------
-        "BaseClass"                     "ability_lua"
-        "ScriptFile"                    "abilities/heroes/meepo/earthbind_ts_example.lua"
-        "AbilityTextureName"            "meepo_earthbind"
-        "AbilityBehavior"               "DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING"
-        "SpellImmunityType"             "SPELL_IMMUNITY_ENEMIES_NO"
-        "SpellDispellableType"          "SPELL_DISPELLABLE_YES"
-        "FightRecapLevel"               "1"
-        "AbilitySound"                  "Hero_Meepo.Earthbind.Cast"
+        "BaseClass"                             "ability_lua"
+        "ScriptFile"                            "abilities/heroes/meepo/earthbind_ts_example.lua"
+        "AbilityTextureName"                    "meepo_earthbind"
+        "AbilityBehavior"                       "DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING"
+        "SpellImmunityType"                     "SPELL_IMMUNITY_ENEMIES_NO"
+        "SpellDispellableType"                  "SPELL_DISPELLABLE_YES"
+        "FightRecapLevel"                       "1"
+        "AbilitySound"                          "Hero_Meepo.Earthbind.Cast"
 
 
         // Casting
         //-------------------------------------------------------------------------------------------------------------
-        "AbilityCastRange"              "1250"
-        "AbilityCastPoint"              "0.3"
+        "AbilityCastRange"                      "1250"
+        "AbilityCastPoint"                      "0.3"
 
-        // Time
+        // Time        
         //-------------------------------------------------------------------------------------------------------------
-        "AbilityCooldown"               "2"
+        "AbilityCooldown"                       "2"
 
         // Cost
         //-------------------------------------------------------------------------------------------------------------
-        "AbilityManaCost"               "10"
+        "AbilityManaCost"                       "10"
 
         // Special
         //-------------------------------------------------------------------------------------------------------------
-        "AbilitySpecial"
+        "AbilityValues"
         {
-            "01"
+            "duration"                          "2.0"
+            "radius"
             {
-                "var_type"              "FIELD_FLOAT"
-                "duration"              "2.0"
+                "value"                         "220"
+                "affected_by_aoe_increase"      "1"
             }
-            "02"
+            "speed"                             "1200"
+            "megameepo_net_offset"
             {
-                "var_type"              "FIELD_INTEGER"
-                "radius"                "220"
+                "value"                         "160"
+                "affected_by_aoe_increase"      "1"
             }
-            "03"
-            {
-                "var_type"              "FIELD_INTEGER"
-                "speed"                 "857"
-            }
-            "04"
-            {
-                "var_type"              "FIELD_INTEGER"
-                "tooltip_range"         "1250"
-            }
-            // Adding cooldown and praying this gets synced
-            "05"
-            {
-                "var_type"              "FIELD_FLOAT"
-                "cooldown"              "2"
-                "LinkedSpecialBonus"    "special_bonus_unique_meepo3"
-            }
-
+            "cooldown"                          "2"
+            "LinkedSpecialBonus"                "special_bonus_unique_meepo3"
         }
-        "AbilityCastAnimation"      "ACT_DOTA_CAST_ABILITY_1"
+        "AbilityCastAnimation"                  "ACT_DOTA_CAST_ABILITY_1"
     }
 }
