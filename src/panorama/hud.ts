@@ -43,3 +43,7 @@ function toArray<T>(obj: Record<number, T>): T[] {
 
     return result;
 }
+
+async function sleep(time: number): Promise<void> {
+    return new Promise<void>((resolve) => $.Schedule(time, resolve));
+}
